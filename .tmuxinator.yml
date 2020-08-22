@@ -1,0 +1,17 @@
+# ./.tmuxinator.yml
+
+name: gobarberapi
+root: ~/dev/gobarber/api/
+
+
+windows:
+  - email: mutt
+  - editor: vim .
+  - server: 
+    - docker start database
+    - docker start mongobarber
+    - yarn dev
+  - git:
+    - git fetch
+    - git status
+
