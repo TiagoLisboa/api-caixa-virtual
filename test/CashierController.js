@@ -3,6 +3,7 @@ import chai, { should } from 'chai';
 import chaiHttp from 'chai-http';
 import chaiJsonSchema from 'chai-json-schema';
 import Cashier from '../src/app/models/cashier';
+import User from '../src/app/models/user';
 import server from '../src/server';
 should();
 
@@ -75,8 +76,14 @@ describe('Cashiers', () => {
    */
   describe('/POST cashier', () => {
     it('it should POST a cashier', done => {
-      let cashier = {
+      const user = User.create({
+        name: 'Fulaninho',
+        email: 'fulano@email.com',
+        password: 'password',
+      });
+      const cashier = {
         name: 'Test chashier',
+        user: user.id,
       };
       chai
         .request(server)
@@ -103,6 +110,7 @@ describe('Cashiers', () => {
           res.body.should.have.property('error');
           res.body.should.have.property('fields');
           res.body.fields.should.have.property('name');
+          res.body.fields.should.have.property('user');
           done();
         });
     });
