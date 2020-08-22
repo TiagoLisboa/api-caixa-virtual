@@ -1,12 +1,11 @@
 import Router from 'express';
 
 import authMiddleware from './app/middlewares/auth';
+import UserController from './app/controllers/UserController';
 
 const routes = new Router();
 
-routes.get('/', async (req, res) => {
-  res.send('Hello World!')
-});
+routes.post('/users', UserController.store);
 
 routes.use(authMiddleware);
 
