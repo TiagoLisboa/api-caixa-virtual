@@ -83,7 +83,7 @@ describe('Cashiers', () => {
       });
       const cashier = {
         name: 'Test chashier',
-        user: user.id,
+        user_id: user.id,
       };
       chai
         .request(server)
@@ -110,7 +110,7 @@ describe('Cashiers', () => {
           res.body.should.have.property('error');
           res.body.should.have.property('fields');
           res.body.fields.should.have.property('name');
-          res.body.fields.should.have.property('user');
+          res.body.fields.should.have.property('user_id');
           done();
         });
     });
