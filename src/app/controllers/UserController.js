@@ -1,5 +1,8 @@
 import Joi from 'joi';
+
 import User from '../models/user';
+
+import userResourcer from '../resources/user';
 
 class UserController {
   async store(req, res, next) {
@@ -24,7 +27,12 @@ class UserController {
       };
       res.status(422).send(message);
     } else {
-      res.send();
+      try {
+        const user = await User.create(result.value);
+        res.send(userResourcer(user));
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
 }
