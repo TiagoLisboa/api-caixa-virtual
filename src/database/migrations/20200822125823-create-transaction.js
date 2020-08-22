@@ -23,15 +23,15 @@ module.exports = {
       description: {
         type: Sequelize.TEXT,
       },
-      createdAt: {
+      create_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      cashierId: {
+      cashier_id: {
         type: Sequelize.INTEGER,
         references: {
           model: {
