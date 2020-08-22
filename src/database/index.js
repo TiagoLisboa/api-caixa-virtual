@@ -6,6 +6,7 @@ import User from '../app/models/user';
 import Cashier from '../app/models/cashier';
 import Transaction from '../app/models/transaction';
 
+const env = process.env.NODE_ENV;
 const models = [User, Cashier, Transaction];
 
 class Database {
@@ -14,7 +15,7 @@ class Database {
   }
 
   init() {
-    this.connection = new Sequelize(databaseConfig);
+    this.connection = new Sequelize(databaseConfig[env]);
 
     models
       .map(model => model.init(this.connection))
