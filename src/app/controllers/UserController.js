@@ -1,5 +1,8 @@
 import Joi from 'joi';
 
+import validateSchema from '../utils/validateSchema';
+import ValidationException from '../exceptions/ValidationException';
+
 import User from '../models/user';
 
 import userResourcer from '../resources/user';
@@ -8,31 +11,24 @@ class UserController {
   async store(req, res, next) {
     const userSchema = Joi.object({
       name: Joi.string().required(),
-      email: Joi.string().required(),
+      email: Joi.string()
+        .required()
+        .email(),
       password: Joi.string().required(),
     });
-    const result = userSchema.validate(req.body, { abortEarly: false });
-    const valid = result.error === undefined;
-    if (!valid) {
-      const fields = result.error.details.reduce(
-        (obj, { message, context }) => ({
-          ...obj,
-          [context.key]: message,
-        }),
-        {}
-      );
-      const message = {
-        error: 'Missing Fields',
-        fields,
-      };
-      res.status(422).send(message);
-    } else {
-      try {
-        const user = await User.create(result.value);
-        res.send(userResourcer(user));
-      } catch (err) {
-        console.error(err);
+    let result;
+    try {
+      result = validateSchema(req.body, userSchema);
+    } catch (e) {
+      if (e instanceof ValidationException) {
+        res.status(422).send(e);
       }
+    }
+    try {
+      const user = await User.create(result);
+      res.send(userResourcer(user));
+    } catch (err) {
+      res.status(400).send({ message: 'error while creating user.' });
     }
   }
 }
