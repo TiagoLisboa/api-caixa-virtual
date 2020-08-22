@@ -34,6 +34,7 @@ describe('Users', () => {
           res.should.have.status(200);
           res.body.should.be.a('object');
           res.body.should.have.property('user');
+          res.body.user.should.have.property('id');
           res.body.user.should.have.property('name');
           res.body.user.should.have.property('email');
           res.body.user.should.not.have.property('password');
