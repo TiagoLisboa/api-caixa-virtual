@@ -1,8 +1,9 @@
 /* eslint-env node, mocha */
-import chai from 'chai';
+import chai, { should } from 'chai';
 import chaiHttp from 'chai-http';
 import User from '../src/app/models/user';
 import server from '../src/server';
+should();
 
 process.env.NODE_ENV = 'test';
 
@@ -27,7 +28,7 @@ describe('Users', () => {
       };
       chai
         .request(server)
-        .post('/user')
+        .post('/users')
         .send(user)
         .end((err, res) => {
           res.should.have.status(200);
@@ -44,11 +45,12 @@ describe('Users', () => {
       let user = {};
       chai
         .request(server)
-        .post('/user')
+        .post('/users')
         .send(user)
         .end((err, res) => {
-          res.should.have.status(200);
+          res.should.have.status(422);
           res.body.should.be.a('object');
+          res.body.should.have.property('error');
           res.body.should.have.property('fields');
           res.body.fields.should.have.property('name');
           res.body.fields.should.have.property('email');
