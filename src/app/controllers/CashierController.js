@@ -4,6 +4,7 @@ import validateSchema from '../utils/validateSchema';
 import ValidationException from '../exceptions/ValidationException';
 
 import Cashier from '../models/cashier';
+import User from '../models/user';
 
 import CashierResourcer from '../resources/Cashier';
 
@@ -22,7 +23,8 @@ class CashierController {
       }
     }
     try {
-      const cashier = await Cashier.create(result);
+      const user = await User.findByPk(result.user_id);
+      const cashier = await user.createCashier({ name: result.name });
       res.send(new CashierResourcer(cashier));
     } catch (err) {
       res.status(400).send({ message: 'error while creating cashier.' });

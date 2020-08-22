@@ -1,6 +1,6 @@
 class Cashier {
   constructor(user) {
-    this.caschier = {
+    this.cashier = {
       id: user.id,
       name: user.name,
     };

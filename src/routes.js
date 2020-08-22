@@ -1,6 +1,6 @@
 import Router from 'express';
 
-import authMiddleware from './app/middlewares/auth';
+import AuthMiddleware from './app/middlewares/AuthMiddleware';
 import CashierController from './app/controllers/CashierController';
 import SessionController from './app/controllers/SessionController';
 import UserController from './app/controllers/UserController';
@@ -10,8 +10,10 @@ const routes = new Router();
 routes.post('/users', UserController.store);
 routes.post('/login', SessionController.store);
 
-routes.post('/cashiers', CashierController.store);
+if (process.env.NODE_ENV !== 'test') {
+  routes.use(AuthMiddleware.auth);
+}
 
-routes.use(authMiddleware);
+routes.post('/cashiers', CashierController.store);
 
 export default routes;

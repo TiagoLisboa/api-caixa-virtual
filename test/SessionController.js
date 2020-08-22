@@ -11,9 +11,9 @@ process.env.NODE_ENV = 'test';
 chai.use(chaiHttp);
 
 describe('Sessions', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     //  Before each test we empty the database
-    User.destroy({
+    await User.destroy({
       where: {},
     });
   });
