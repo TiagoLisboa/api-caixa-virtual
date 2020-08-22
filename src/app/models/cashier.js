@@ -1,10 +1,21 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const Cashier = sequelize.define('Cashier', {
-    name: DataTypes.STRING
-  }, {});
-  Cashier.associate = function(models) {
-    // associations can be defined here
-  };
-  return Cashier;
-};
+import Sequelize, { Model } from 'sequelize';
+
+class Cashier extends Model {
+  static init(sequelize) {
+    super.init(
+      {
+        name: Sequelize.STRING,
+      },
+      { sequelize }
+    );
+
+    return this;
+  }
+
+  static associate(models) {
+    this.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+  }
+}
+
+export default Cashier;
+
