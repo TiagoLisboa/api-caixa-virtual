@@ -5,6 +5,7 @@ import chaiJsonSchema from 'chai-json-schema';
 import Cashier from '../src/app/models/cashier';
 import User from '../src/app/models/user';
 import server from '../src/server';
+
 should();
 
 process.env.NODE_ENV = 'test';
@@ -46,9 +47,12 @@ const cashierCollectionSchema = {
 };
 
 describe('Cashiers', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     //  Before each test we empty the database
-    Cashier.destroy({
+    await Cashier.destroy({
+      where: {},
+    });
+    await User.destroy({
       where: {},
     });
   });
@@ -75,26 +79,25 @@ describe('Cashiers', () => {
    * Test the /POST route
    */
   describe('/POST cashier', () => {
-    it('it should POST a cashier', done => {
-      const user = User.create({
+    it('it should POST a cashier', async () => {
+      const user = await User.create({
         name: 'Fulaninho',
         email: 'fulano@email.com',
         password: 'password',
       });
-      const cashier = {
+      const cashierData = {
         name: 'Test chashier',
         user_id: user.id,
       };
       chai
         .request(server)
         .post('/cashiers')
-        .send(cashier)
+        .send(cashierData)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
           res.body.should.have.property('cashier');
-          res.body.cashier.should.be.jsonSchema(cashierSchema);
-          done();
+          res.body.should.be.jsonSchema(cashierSchema);
         });
     });
 
