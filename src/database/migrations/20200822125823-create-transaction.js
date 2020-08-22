@@ -33,6 +33,7 @@ module.exports = {
       },
       cashier_id: {
         type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
         references: {
           model: {
             tableName: 'cashiers',

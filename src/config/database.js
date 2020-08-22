@@ -17,6 +17,7 @@ module.exports = {
     dialect: 'sqlite',
     storage: 'test.sqlite',
     logging: false,
+    foreignKey: true,
     define: {
       timestamps: true,
       underscored: true,

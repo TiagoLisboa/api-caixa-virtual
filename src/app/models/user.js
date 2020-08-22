@@ -22,7 +22,13 @@ class User extends Model {
     return this;
   }
 
-  static associate(models) {}
+  static associate(models) {
+    this.hasMany(models.Cashier, {
+      foreignKey: 'user_id',
+      as: 'cashiers',
+      onDelete: 'CASCADE',
+    });
+  }
 
   checkPassword(password) {
     return bcrypt.compare(password, this.password_hash);

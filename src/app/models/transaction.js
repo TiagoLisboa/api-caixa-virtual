@@ -16,9 +16,12 @@ class Transaction extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Cashier, { foreignKey: 'cashierId', as: 'cashier' });
+    this.belongsTo(models.Cashier, {
+      foreignKey: 'cashier_id',
+      as: 'cashier',
+      onDelete: 'CASCADE',
+    });
   }
 }
 
 export default Transaction;
-

@@ -15,13 +15,17 @@ module.exports = {
       create_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        field: 'created_at',
       },
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        field: 'updated_at',
       },
       user_id: {
         type: Sequelize.INTEGER,
+        field: 'user_id',
+        onDelete: 'CASCADE',
         references: {
           model: {
             tableName: 'users',
