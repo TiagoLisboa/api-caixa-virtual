@@ -21,7 +21,7 @@ describe('Sessions', () => {
    * Test the /POST route
    */
   describe('/POST login', () => {
-    it('it should POST a login', async done => {
+    it('it should POST a login', async () => {
       const userData = {
         name: 'Testenaldo',
         email: 'testenaldo@email.com',
@@ -31,7 +31,10 @@ describe('Sessions', () => {
       chai
         .request(server)
         .post('/login')
-        .send(userData)
+        .send({
+          email: userData.email,
+          password: userData.password,
+        })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -41,7 +44,27 @@ describe('Sessions', () => {
           res.body.user.should.have.property('email');
           res.body.user.should.not.have.property('password');
           res.body.should.have.property('token');
-          done();
+        });
+    });
+
+    it('it should not POST a login with invalid password', async () => {
+      const userData = {
+        name: 'Testenaldo',
+        email: 'testenaldo@email.com',
+        password: 'grandetestenaldo',
+      };
+      await User.create(userData);
+      chai
+        .request(server)
+        .post('/login')
+        .send({
+          email: userData.email,
+          password: 'obivouslywrongpassword',
+        })
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.a('object');
+          res.body.should.have.property('error');
         });
     });
 
