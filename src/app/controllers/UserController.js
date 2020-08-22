@@ -5,7 +5,7 @@ import ValidationException from '../exceptions/ValidationException';
 
 import User from '../models/user';
 
-import userResourcer from '../resources/user';
+import UserResourcer from '../resources/User';
 
 class UserController {
   async store(req, res, next) {
@@ -26,7 +26,7 @@ class UserController {
     }
     try {
       const user = await User.create(result);
-      res.send(userResourcer(user));
+      res.send(new UserResourcer(user));
     } catch (err) {
       res.status(400).send({ message: 'error while creating user.' });
     }
