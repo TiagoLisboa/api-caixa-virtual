@@ -219,4 +219,81 @@ describe('Cashiers', () => {
       res.body.fields.should.have.property('name');
     });
   });
+
+  /*
+   * Test the /PUT route
+   */
+  describe('/PUT cashier', () => {
+    it('it should PUT a cashier', async () => {
+      const user = await User.create({
+        name: 'Fulaninho',
+        email: 'fulano@email.com',
+        password: 'password',
+      });
+      const cashier = await user.createCashier({
+        name: 'Old cashier name',
+      });
+      const cashierData = {
+        name: 'Test chashier',
+      };
+      const token = authenticateUser(user);
+      const res = await chai
+        .request(server)
+        .put(`/cashiers/${cashier.id}`)
+        .set('authorization', `Bearer ${token}`)
+        .send(cashierData);
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.have.property('cashier');
+      res.body.should.be.jsonSchema(cashierSchema);
+    });
+
+    it('it should not PUT a empty cashier', async () => {
+      const cashierData = {};
+      const user = await User.create({
+        name: 'Fulaninho',
+        email: 'fulano@email.com',
+        password: 'password',
+      });
+      const cashier = await user.createCashier({
+        name: 'Old cashier name',
+      });
+      const token = authenticateUser(user);
+
+      const res = await chai
+        .request(server)
+        .put(`/cashiers/${cashier.id}`)
+        .set('authorization', `Bearer ${token}`)
+        .send(cashierData);
+      res.should.have.status(422);
+      res.body.should.be.a('object');
+      res.body.should.have.property('error');
+      res.body.should.have.property('fields');
+      res.body.fields.should.have.property('name');
+    });
+  });
+
+  /*
+   * Test the /DELETE route
+   */
+  describe('/DELETE cashier', () => {
+    it('it should DELETE a cashier', async () => {
+      const user = await User.create({
+        name: 'Fulaninho',
+        email: 'fulano@email.com',
+        password: 'password',
+      });
+      const cashier = await user.createCashier({
+        name: 'Old cashier name',
+      });
+      const token = authenticateUser(user);
+      const res = await chai
+        .request(server)
+        .delete(`/cashiers/${cashier.id}`)
+        .set('authorization', `Bearer ${token}`);
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.have.property('message');
+    });
+  });
 });
