@@ -27,5 +27,13 @@ routes.delete('/categories/:categoryId', CategoryController.destroy);
 
 routes.get('/cashiers/:cashierId/transactions', TransactionController.index);
 routes.post('/cashiers/:cashierId/transactions', TransactionController.store);
+routes.put(
+  '/cashiers/:cashierId/transactions/:transactionId',
+  TransactionController.update
+);
+routes.delete(
+  '/cashiers/:cashierId/transactions/:transactionId',
+  TransactionController.destroy
+);
 
 export default routes;
