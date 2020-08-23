@@ -17,6 +17,7 @@ routes.use(AuthMiddleware.auth);
 routes.get('/cashiers', CashierController.index);
 routes.post('/cashiers', CashierController.store);
 routes.get('/cashiers/:cashierId', CashierController.show);
+routes.put('/cashiers/:cashierId', CashierController.update);
 
 routes.get('/categories', CategoryController.index);
 routes.post('/categories', CategoryController.store);
