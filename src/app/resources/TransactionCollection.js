@@ -1,13 +1,13 @@
-class Transaction {
+class TransactionCollection {
   constructor(transactions) {
     this.transactions = transactions.map(transaction => ({
       id: transaction.id,
       type: transaction.type,
       value: transaction.value,
-      categories: transaction.categories,
+      categories: transaction.Categories.map(({ name }) => ({ name })),
       description: transaction.description,
     }));
   }
 }
 
-export default Transaction;
+export default TransactionCollection;

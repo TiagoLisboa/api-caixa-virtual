@@ -2,6 +2,7 @@ import Joi from 'joi';
 
 import validateSchema from '../utils/validateSchema';
 import ValidationException from '../exceptions/ValidationException';
+import Category from '../models/category';
 import Cashier from '../models/cashier';
 import Transaction from '../models/transaction';
 import TransactionResource from '../resources/Transaction';
@@ -24,6 +25,7 @@ class TransactionsController {
       where: { cashier_id },
       limit: 20,
       offset: (page - 1) * 20,
+      include: Category,
     });
 
     res.send(new TransactionCollection(transactions));
@@ -56,12 +58,17 @@ class TransactionsController {
           error: 'Cashier not found!',
         });
       }
-      const transaction = await cashier.createTransaction({
-        type,
-        value,
-        description,
-      });
+      const transaction = await Transaction.create(
+        { type, value, description, cashier_id: cashier.id },
+        {
+          include: [{ model: Cashier, as: 'cashier' }, Category],
+        }
+      );
       await transaction.addCategories(categories);
+      transaction.categories = await transaction.getCategories();
+      transaction.categories = transaction.categories.map(({ name }) => ({
+        name,
+      }));
       return res.send(new TransactionResource(transaction));
     } catch (err) {
       if (err instanceof ValidationException) {
