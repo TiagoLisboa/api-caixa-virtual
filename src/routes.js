@@ -18,6 +18,7 @@ routes.get('/cashiers', CashierController.index);
 routes.post('/cashiers', CashierController.store);
 routes.get('/cashiers/:cashierId', CashierController.show);
 routes.put('/cashiers/:cashierId', CashierController.update);
+routes.delete('/cashiers/:cashierId', CashierController.destroy);
 
 routes.get('/categories', CategoryController.index);
 routes.post('/categories', CategoryController.store);

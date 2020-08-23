@@ -123,7 +123,29 @@ class CashierController {
       await cashier.update({ name });
       return res.send(new CashierResourcer(cashier));
     } catch (err) {
-      console.log(err);
+      return res.status(400).send({ message: 'error while updating cashier.' });
+    }
+  }
+
+  /**
+   * deletes a instance of the resource.
+   *
+   * @param {Request}  req
+   * @param {Response} res
+   *
+   * @return {void}
+   */
+  async destroy(req, res) {
+    const id = req.params.cashierId;
+
+    const cashier = await Cashier.findByPk(id);
+    if (!cashier) {
+      return res.status(404).send({ message: 'Not found' });
+    }
+    try {
+      await cashier.destroy();
+      return res.send({ message: 'cashier sucessfully deleted.' });
+    } catch (err) {
       return res.status(400).send({ message: 'error while updating cashier.' });
     }
   }
