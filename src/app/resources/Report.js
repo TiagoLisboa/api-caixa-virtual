@@ -8,7 +8,7 @@ class Report {
     this.movimentacoes = cashier.transactions.map(transaction => ({
       data: transaction.createdAt,
       id: transaction.id,
-      tipo: transaction.type ? 'ganho' : 'gasto',
+      tipo: transaction.type ? 'entrada' : 'saida',
       valor: transaction.value,
       descricao: transaction.description,
       categorias: transaction.Categories.map(({ id, name }) => ({
