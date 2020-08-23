@@ -1,12 +1,17 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/server.js",
+    "serve": "babel-node src/server.js",
     "pretest": "NODE_ENV=test sequelize-cli db:migrate",
-    "test": "NODE_ENV=test ./node_modules/.bin/mocha --require @babel/polyfill --require @babel/register --timeout 10000"
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha --require @babel/polyfill --require @babel/register --timeout 10000",
+    "clean": "rm -rf build && mkdir build",
+    "build-babel": "babel -d ./build ./src -s",
+    "build": "npm run clean && npm run build-babel",
+    "start": "npm run build && node ./build/server.js"
   },
   "dependencies": {
     "@sentry/node": "5.12.2",

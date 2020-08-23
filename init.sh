@@ -1,4 +1,4 @@
 #!/bin/sh
 yarn sequelize db:migrate
-yarn dev
+node src/server.js
 

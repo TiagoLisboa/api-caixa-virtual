@@ -1,3 +1,5 @@
+"use strict";
+
 require('dotenv/config');
 
 module.exports = {
@@ -10,8 +12,8 @@ module.exports = {
     define: {
       timestamps: true,
       underscored: true,
-      underscoredAll: true,
-    },
+      underscoredAll: true
+    }
   },
   staging: {
     dialect: 'postgres',
@@ -22,8 +24,8 @@ module.exports = {
     define: {
       timestamps: true,
       underscored: true,
-      underscoredAll: true,
-    },
+      underscoredAll: true
+    }
   },
   test: {
     dialect: 'sqlite',
@@ -33,7 +35,8 @@ module.exports = {
     define: {
       timestamps: true,
       underscored: true,
-      underscoredAll: true,
-    },
-  },
+      underscoredAll: true
+    }
+  }
 };
+//# sourceMappingURL=database.js.map
