@@ -16,8 +16,15 @@ module.exports = {
         type: Sequelize.FLOAT,
         allowNull: false,
       },
-      category: {
+      category_id: {
         type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: {
+            tableName: 'categories',
+          },
+          key: 'id',
+        },
         allowNull: false,
       },
       description: {
@@ -47,6 +54,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Transactions');
+    return queryInterface.dropTable('transactions');
   },
 };
