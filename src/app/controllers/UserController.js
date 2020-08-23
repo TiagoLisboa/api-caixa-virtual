@@ -8,6 +8,14 @@ import User from '../models/user';
 import UserResourcer from '../resources/User';
 
 class UserController {
+  /**
+   * stores a instance of the resource.
+   *
+   * @param {Request}  req
+   * @param {Response} res
+   *
+   * @return {void}
+   */
   async store(req, res, next) {
     const userSchema = Joi.object({
       name: Joi.string().required(),

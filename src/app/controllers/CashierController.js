@@ -10,7 +10,15 @@ import CashierResourcer from '../resources/Cashier';
 import CashierCollection from '../resources/CashierCollection';
 
 class CashierController {
-  async index(req, res, next) {
+  /**
+   * displays a listing of the resource.
+   *
+   * @param {Request}  req
+   * @param {Response} res
+   *
+   * @return {void}
+   */
+  async index(req, res) {
     const user_id = req.userId;
     const { page = 1 } = req.query;
 
@@ -23,7 +31,15 @@ class CashierController {
     res.send(new CashierCollection(cashiers));
   }
 
-  async store(req, res, next) {
+  /**
+   * stores a instance of the resource.
+   *
+   * @param {Request}  req
+   * @param {Response} res
+   *
+   * @return {void}
+   */
+  async store(req, res) {
     const cashierSchema = Joi.object({
       name: Joi.string().required(),
       user_id: Joi.number().required(),

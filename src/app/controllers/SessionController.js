@@ -8,6 +8,14 @@ import SessionResource from '../resources/Session';
 import validateSchema from '../utils/validateSchema';
 
 class SessionController {
+  /**
+   * stores a instance of the resource.
+   *
+   * @param {Request}  req
+   * @param {Response} res
+   *
+   * @return {void}
+   */
   async store(req, res, next) {
     const { email, password } = req.body;
     const loginSchema = Joi.object({
