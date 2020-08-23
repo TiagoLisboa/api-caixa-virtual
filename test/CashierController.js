@@ -5,6 +5,7 @@ import chaiJsonSchema from 'chai-json-schema';
 import Cashier from '../src/app/models/cashier';
 import User from '../src/app/models/user';
 import server from '../src/server';
+import authenticateUser from './authenticateUser';
 
 should();
 
@@ -61,16 +62,29 @@ describe('Cashiers', () => {
    * Test the /GET route
    */
   describe('/GET cashier', () => {
-    it('it should GET a cashier', done => {
+    it('it should GET a cashier', async () => {
+      const user = await User.create(
+        {
+          name: 'testinaldo',
+          email: 'testinaldo@email.com',
+          password: 'password',
+          cashiers: [{ name: 'first' }, { name: 'second' }],
+        },
+        {
+          include: [{ model: Cashier, as: 'cashiers' }],
+        }
+      );
+
+      const token = authenticateUser(user);
+
       chai
         .request(server)
         .get('/cashiers')
+        .set('authorization', `Bearer ${token}`)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
-          res.body.should.have.property('cashiers');
-          res.body.cashiers.should.be.jsonSchema(cashierCollectionSchema);
-          done();
+          res.body.should.be.jsonSchema(cashierCollectionSchema);
         });
     });
   });
@@ -89,9 +103,11 @@ describe('Cashiers', () => {
         name: 'Test chashier',
         user_id: user.id,
       };
+      const token = authenticateUser(user);
       chai
         .request(server)
         .post('/cashiers')
+        .set('authorization', `Bearer ${token}`)
         .send(cashierData)
         .end((err, res) => {
           res.should.have.status(200);
@@ -101,11 +117,19 @@ describe('Cashiers', () => {
         });
     });
 
-    it('it should not POST a empty cashier', done => {
-      let cashier = {};
+    it('it should not POST a empty cashier', async () => {
+      const cashier = {};
+      const user = await User.create({
+        name: 'Fulaninho',
+        email: 'fulano@email.com',
+        password: 'password',
+      });
+      const token = authenticateUser(user);
+
       chai
         .request(server)
         .post('/cashiers')
+        .set('authorization', `Bearer ${token}`)
         .send(cashier)
         .end((err, res) => {
           res.should.have.status(422);
@@ -114,7 +138,6 @@ describe('Cashiers', () => {
           res.body.should.have.property('fields');
           res.body.fields.should.have.property('name');
           res.body.fields.should.have.property('user_id');
-          done();
         });
     });
   });
