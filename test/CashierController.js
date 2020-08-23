@@ -62,7 +62,7 @@ describe('Cashiers', () => {
    * Test the /GET route
    */
   describe('/GET cashier', () => {
-    it('it should GET a cashier', async () => {
+    it('it should GET all cashiers', async () => {
       const user = await User.create(
         {
           name: 'testinaldo',
@@ -85,6 +85,30 @@ describe('Cashiers', () => {
           res.should.have.status(200);
           res.body.should.be.a('object');
           res.body.should.be.jsonSchema(cashierCollectionSchema);
+        });
+    });
+
+    it('it should GET a single cashier', async () => {
+      const user = await User.create({
+        name: 'testinaldo',
+        email: 'testinaldo@email.com',
+        password: 'password',
+      });
+      const cashier = await user.createCashier({
+        name: 'cashier',
+      });
+      const token = authenticateUser(user);
+      const { id } = cashier;
+
+      chai
+        .request(server)
+        .get(`/cashiers/${id}`)
+        .set('authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.have.property('cashier');
+          res.body.should.be.jsonSchema(cashierSchema);
         });
     });
   });
