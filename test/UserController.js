@@ -2,7 +2,7 @@
 import chai, { should } from 'chai';
 import chaiHttp from 'chai-http';
 import User from '../src/app/models/user';
-import server from '../src/server';
+import server, { stop } from '../src/server';
 should();
 
 process.env.NODE_ENV = 'test';
@@ -16,6 +16,12 @@ describe('Users', () => {
       where: {},
     });
   });
+
+  /*
+   * Stops the server
+   */
+  after(stop);
+
   /*
    * Test the /POST route
    */

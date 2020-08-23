@@ -2,6 +2,8 @@ import app from './app';
 
 const port = process.env.NODE_ENV === 'development' ? 3333 : 3339;
 
-app.listen(port);
+const server = app.listen(port);
 
-export default app;
+export const stop = () => server.close();
+
+export default server;

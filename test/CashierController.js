@@ -4,7 +4,7 @@ import chaiHttp from 'chai-http';
 import chaiJsonSchema from 'chai-json-schema';
 import Cashier from '../src/app/models/cashier';
 import User from '../src/app/models/user';
-import server from '../src/server';
+import server, { stop } from '../src/server';
 import authenticateUser from './authenticateUser';
 
 should();
@@ -57,6 +57,11 @@ describe('Cashiers', () => {
       where: {},
     });
   });
+
+  /*
+   * Stops the server
+   */
+  after(stop);
 
   /*
    * Test the /GET route
