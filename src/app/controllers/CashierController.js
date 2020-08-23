@@ -4,10 +4,13 @@ import validateSchema from '../utils/validateSchema';
 import ValidationException from '../exceptions/ValidationException';
 
 import Cashier from '../models/cashier';
+import Category from '../models/category';
+import Transaction from '../models/transaction';
 import User from '../models/user';
 
 import CashierResourcer from '../resources/Cashier';
 import CashierCollection from '../resources/CashierCollection';
+import ReportResourcer from '../resources/Report';
 
 class CashierController {
   /**
@@ -23,12 +26,45 @@ class CashierController {
     const { page = 1 } = req.query;
 
     const cashiers = await Cashier.findAll({
-      where: { user_id: user_id },
+      where: { user_id },
       limit: 20,
       offset: (page - 1) * 20,
     });
 
     res.send(new CashierCollection(cashiers));
+  }
+
+  /**
+   * displays a visualization of the specified resource.
+   *
+   * @param {Request}  req
+   * @param {Response} res
+   *
+   * @return {void}
+   */
+  async show(req, res) {
+    const id = req.params.cashierId;
+    const { page = 1 } = req.query;
+
+    const cashier = await Cashier.findOne({
+      where: { id },
+      limit: 20,
+      offset: (page - 1) * 20,
+      include: [
+        {
+          model: Transaction,
+          as: 'transactions',
+          include: Category,
+        },
+      ],
+    });
+    if (!cashier) {
+      return res.status(404).send({
+        error: 'Cashier not found!',
+      });
+    }
+
+    res.send(new ReportResourcer(cashier));
   }
 
   /**
