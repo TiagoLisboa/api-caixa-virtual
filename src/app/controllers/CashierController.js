@@ -31,7 +31,7 @@ class CashierController {
       offset: (page - 1) * 20,
     });
 
-    res.send(new CashierCollection(cashiers));
+    return res.send(new CashierCollection(cashiers));
   }
 
   /**
@@ -64,7 +64,7 @@ class CashierController {
       });
     }
 
-    res.send(new ReportResourcer(cashier));
+    return res.send(new ReportResourcer(cashier));
   }
 
   /**
@@ -84,15 +84,15 @@ class CashierController {
       result = validateSchema(req.body, cashierSchema);
     } catch (e) {
       if (e instanceof ValidationException) {
-        res.status(422).send(e);
+        return res.status(422).send(e);
       }
     }
     try {
       const user = await User.findByPk(req.userId);
       const cashier = await user.createCashier({ name: result.name });
-      res.send(new CashierResourcer(cashier));
+      return res.send(new CashierResourcer(cashier));
     } catch (err) {
-      res.status(400).send({ message: 'error while creating cashier.' });
+      return res.status(400).send({ message: 'error while creating cashier.' });
     }
   }
 }

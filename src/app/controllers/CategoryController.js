@@ -28,7 +28,7 @@ class CategoryController {
       offset: (page - 1) * 20,
     });
 
-    res.send(new CategoryCollection(categories));
+    return res.send(new CategoryCollection(categories));
   }
 
   /**
@@ -48,15 +48,17 @@ class CategoryController {
       result = validateSchema(req.body, categorySchema);
     } catch (e) {
       if (e instanceof ValidationException) {
-        res.status(422).send(e);
+        return res.status(422).send(e);
       }
     }
     try {
       const user = await User.findByPk(req.userId);
       const category = await user.createCategory({ name: result.name });
-      res.send(new CategoryResourcer(category));
+      return res.send(new CategoryResourcer(category));
     } catch (err) {
-      res.status(400).send({ message: 'error while creating category.' });
+      return res
+        .status(400)
+        .send({ message: 'error while creating category.' });
     }
   }
 }

@@ -28,7 +28,7 @@ class TransactionsController {
       include: Category,
     });
 
-    res.send(new TransactionCollection(transactions));
+    return res.send(new TransactionCollection(transactions));
   }
 
   /**

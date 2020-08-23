@@ -29,14 +29,14 @@ class UserController {
       result = validateSchema(req.body, userSchema);
     } catch (e) {
       if (e instanceof ValidationException) {
-        res.status(422).send(e);
+        return res.status(422).send(e);
       }
     }
     try {
       const user = await User.create(result);
-      res.send(new UserResourcer(user));
+      return res.send(new UserResourcer(user));
     } catch (err) {
-      res.status(400).send({ message: 'error while creating user.' });
+      return res.status(400).send({ message: 'error while creating user.' });
     }
   }
 }

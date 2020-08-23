@@ -29,23 +29,23 @@ class SessionController {
       result = validateSchema(req.body, loginSchema);
     } catch (e) {
       if (e instanceof ValidationException) {
-        res.status(422).send(e);
+        return res.status(422).send(e);
       }
     }
     const user = await User.findOne({
       where: { email },
     });
     if (!user) {
-      res.status(401).json({ error: 'User not found' });
+      return res.status(401).json({ error: 'User not found' });
     }
     if (!(await user.checkPassword(password))) {
-      res.status(401).json({ error: 'Password does not match' });
+      return res.status(401).json({ error: 'Password does not match' });
     }
     const { id } = user;
     const token = jwt.sign({ id }, authConfig.secret, {
       expiresIn: authConfig.expiresIn,
     });
-    res.send(new SessionResource(user, token));
+    return res.send(new SessionResource(user, token));
   }
 }
 
