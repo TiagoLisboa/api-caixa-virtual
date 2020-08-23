@@ -7,8 +7,22 @@ import Cashier from '../models/cashier';
 import User from '../models/user';
 
 import CashierResourcer from '../resources/Cashier';
+import CashierCollection from '../resources/CashierCollection';
 
 class CashierController {
+  async index(req, res, next) {
+    const user_id = req.userId;
+    const { page = 1 } = req.query;
+
+    const cashiers = await Cashier.findAll({
+      where: { user_id: user_id },
+      limit: 20,
+      offset: (page - 1) * 20,
+    });
+
+    res.send(new CashierCollection(cashiers));
+  }
+
   async store(req, res, next) {
     const cashierSchema = Joi.object({
       name: Joi.string().required(),

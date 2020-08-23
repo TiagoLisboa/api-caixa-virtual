@@ -10,10 +10,9 @@ const routes = new Router();
 routes.post('/users', UserController.store);
 routes.post('/login', SessionController.store);
 
-if (process.env.NODE_ENV !== 'test') {
-  routes.use(AuthMiddleware.auth);
-}
+routes.use(AuthMiddleware.auth);
 
+routes.get('/cashiers', CashierController.index);
 routes.post('/cashiers', CashierController.store);
 
 export default routes;
