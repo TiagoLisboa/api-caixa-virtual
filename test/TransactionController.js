@@ -60,6 +60,9 @@ describe('Transactions', () => {
     await Transaction.destroy({
       where: {},
     });
+    await Cashier.destroy({
+      where: {},
+    });
     await User.destroy({
       where: {},
     });
@@ -113,7 +116,7 @@ describe('Transactions', () => {
         email: 'fulano@email.com',
         password: 'password',
       });
-      const cashier = await Cashier.create({
+      const cashier = await user.createCashier({
         name: 'teste',
       });
       const transactionData = {
@@ -143,7 +146,7 @@ describe('Transactions', () => {
         email: 'fulano@email.com',
         password: 'password',
       });
-      const cashier = await Cashier.create({
+      const cashier = await user.createCashier({
         name: 'teste',
       });
       const token = authenticateUser(user);
