@@ -28,6 +28,11 @@ class User extends Model {
       as: 'cashiers',
       onDelete: 'CASCADE',
     });
+    this.hasMany(models.Category, {
+      foreignKey: 'user_id',
+      as: 'categories',
+      onDelete: 'CASCADE',
+    });
   }
 
   checkPassword(password) {
