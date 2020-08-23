@@ -3,6 +3,8 @@ import chai, { should } from 'chai';
 import chaiHttp from 'chai-http';
 import chaiJsonSchema from 'chai-json-schema';
 import Cashier from '../src/app/models/cashier';
+import Category from '../src/app/models/category';
+import Transaction from '../src/app/models/transaction';
 import User from '../src/app/models/user';
 import server, { stop } from '../src/server';
 import authenticateUser from './authenticateUser';
@@ -47,6 +49,40 @@ const cashierCollectionSchema = {
   },
 };
 
+const cashierReportSchema = {
+  title: 'Cashier report schema',
+  type: 'object',
+  required: ['saldoTotal', 'movimentacoes'],
+  properties: {
+    saldoTotal: { type: 'number' },
+    movimentacoes: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['data', 'id', 'categorias', 'tipo', 'valor', 'descricao'],
+        properties: {
+          data: { type: 'string', format: 'date-time' },
+          id: { type: 'number' },
+          tipo: { type: 'string' },
+          valor: { type: 'number' },
+          descricao: { type: 'string' },
+          categorias: {
+            type: 'array',
+            items: {
+              type: 'object',
+              required: ['id', 'nome'],
+              properties: {
+                id: { type: 'number' },
+                nome: { type: 'string' },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
 describe('Cashiers', () => {
   beforeEach(async () => {
     //  Before each test we empty the database
@@ -54,6 +90,9 @@ describe('Cashiers', () => {
       where: {},
     });
     await User.destroy({
+      where: {},
+    });
+    await Transaction.destroy({
       where: {},
     });
   });
@@ -91,29 +130,47 @@ describe('Cashiers', () => {
       res.body.should.be.jsonSchema(cashierCollectionSchema);
     });
 
-    // it('it should GET a single cashier, showing the financial resume', async () => {
-    //   const user = await User.create({
-    //     name: 'testinaldo',
-    //     email: 'testinaldo@email.com',
-    //     password: 'password',
-    //   });
-    //   const cashier = await user.createCashier({
-    //     name: 'cashier',
-    //   });
-    //   const token = authenticateUser(user);
-    //   const { id } = cashier;
+    it('it should GET a single cashier, showing the financial report', async () => {
+      const user = await User.create({
+        name: 'testinaldo',
+        email: 'testinaldo@email.com',
+        password: 'password',
+      });
+      const category = await user.createCategory({
+        name: 'Test Category',
+      });
+      const cashier = await user.createCashier(
+        {
+          name: 'teste',
+        },
+        {
+          include: [{ model: Transaction, as: 'transactions' }],
+        }
+      );
+      const transaction = await cashier.createTransaction({
+        type: 0,
+        value: 15,
+        description: 'not mandatory',
+      });
+      await transaction.addCategories([category]);
+      const transaction2 = await cashier.createTransaction({
+        type: 1,
+        value: 32,
+        description: 'not mandatory',
+      });
+      await transaction.addCategories([category]);
 
-    //   chai
-    //     .request(server)
-    //     .get(`/cashiers/${id}`)
-    //     .set('authorization', `Bearer ${token}`)
-    //     .end((err, res) => {
-    //       res.should.have.status(200);
-    //       res.body.should.be.a('object');
-    //       res.body.should.have.property('cashier');
-    //       res.body.should.be.jsonSchema(cashierSchema);
-    //     });
-    // });
+      const token = authenticateUser(user);
+      const { id } = cashier;
+
+      const res = await chai
+        .request(server)
+        .get(`/cashiers/${id}`)
+        .set('authorization', `Bearer ${token}`);
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.be.jsonSchema(cashierReportSchema);
+    });
   });
 
   /*
