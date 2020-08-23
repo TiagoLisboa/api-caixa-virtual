@@ -15,7 +15,7 @@ class Cashier extends Model {
   static associate(models) {
     this.hasMany(models.Transaction, {
       foreignKey: 'cashier_id',
-      as: 'transacions',
+      as: 'transactions',
       onDelete: 'CASCADE',
     });
     this.belongsTo(models.User, {

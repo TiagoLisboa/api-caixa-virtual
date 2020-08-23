@@ -26,10 +26,12 @@ module.exports = {
       create_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        field: 'created_at',
       },
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        field: 'updated_at',
       },
       cashier_id: {
         type: Sequelize.INTEGER,
