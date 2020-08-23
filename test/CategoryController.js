@@ -138,4 +138,81 @@ describe('Categories', () => {
       res.body.fields.should.have.property('name');
     });
   });
+
+  /*
+   * Test the /PUT route
+   */
+  describe('/PUT category', () => {
+    it('it should PUT a category', async () => {
+      const user = await User.create({
+        name: 'Fulaninho',
+        email: 'fulano@email.com',
+        password: 'password',
+      });
+      const category = await user.createCategory({
+        name: 'Old category name',
+      });
+      const categoryData = {
+        name: 'Test chashier',
+      };
+      const token = authenticateUser(user);
+      const res = await chai
+        .request(server)
+        .put(`/categories/${category.id}`)
+        .set('authorization', `Bearer ${token}`)
+        .send(categoryData);
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.have.property('category');
+      res.body.should.be.jsonSchema(categorySchema);
+    });
+
+    it('it should not PUT a empty category', async () => {
+      const categoryData = {};
+      const user = await User.create({
+        name: 'Fulaninho',
+        email: 'fulano@email.com',
+        password: 'password',
+      });
+      const category = await user.createCategory({
+        name: 'Old category name',
+      });
+      const token = authenticateUser(user);
+
+      const res = await chai
+        .request(server)
+        .put(`/categories/${category.id}`)
+        .set('authorization', `Bearer ${token}`)
+        .send(categoryData);
+      res.should.have.status(422);
+      res.body.should.be.a('object');
+      res.body.should.have.property('error');
+      res.body.should.have.property('fields');
+      res.body.fields.should.have.property('name');
+    });
+  });
+
+  /*
+   * Test the /DELETE route
+   */
+  describe('/DELETE category', () => {
+    it('it should DELETE a category', async () => {
+      const user = await User.create({
+        name: 'Fulaninho',
+        email: 'fulano@email.com',
+        password: 'password',
+      });
+      const category = await user.createCategory({
+        name: 'Old category name',
+      });
+      const token = authenticateUser(user);
+      const res = await chai
+        .request(server)
+        .delete(`/categories/${category.id}`)
+        .set('authorization', `Bearer ${token}`);
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.have.property('message');
+    });
+  });
 });
