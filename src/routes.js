@@ -23,6 +23,7 @@ routes.delete('/cashiers/:cashierId', CashierController.destroy);
 routes.get('/categories', CategoryController.index);
 routes.post('/categories', CategoryController.store);
 routes.put('/categories/:categoryId', CategoryController.update);
+routes.delete('/categories/:categoryId', CategoryController.destroy);
 
 routes.get('/cashiers/:cashierId/transactions', TransactionController.index);
 routes.post('/cashiers/:cashierId/transactions', TransactionController.store);

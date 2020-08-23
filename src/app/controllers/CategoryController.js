@@ -97,6 +97,31 @@ class CategoryController {
         .send({ message: 'error while updating category.' });
     }
   }
+
+  /**
+   * deletes a instance of the resource.
+   *
+   * @param {Request}  req
+   * @param {Response} res
+   *
+   * @return {void}
+   */
+  async destroy(req, res) {
+    const id = req.params.categoryId;
+
+    const category = await Category.findByPk(id);
+    if (!category) {
+      return res.status(404).send({ message: 'Not found' });
+    }
+    try {
+      await category.destroy();
+      return res.send({ message: 'category sucessfully deleted.' });
+    } catch (err) {
+      return res
+        .status(400)
+        .send({ message: 'error while updating category.' });
+    }
+  }
 }
 
 export default new CategoryController();
