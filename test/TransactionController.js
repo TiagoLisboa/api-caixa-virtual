@@ -69,7 +69,7 @@ const transactionCollectionSchema = {
   },
 };
 
-describe('Transactions', () => {
+describe('Transactions', async () => {
   beforeEach(async () => {
     //  Before each test we empty the database
     await Transaction.destroy({
@@ -117,15 +117,13 @@ describe('Transactions', () => {
 
       const token = authenticateUser(user);
 
-      chai
+      const res = await chai
         .request(server)
         .get(`/cashiers/${cashier.id}/transactions`)
-        .set('authorization', `Bearer ${token}`)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          res.body.should.be.jsonSchema(transactionCollectionSchema);
-        });
+        .set('authorization', `Bearer ${token}`);
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.be.jsonSchema(transactionCollectionSchema);
     });
   });
 
@@ -150,17 +148,15 @@ describe('Transactions', () => {
         description: 'not mandatory',
       };
       const token = authenticateUser(user);
-      chai
+      const res = await chai
         .request(server)
         .post(`/cashiers/${cashier.id}/transactions`)
         .set('authorization', `Bearer ${token}`)
-        .send(transactionData)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          res.body.should.have.property('transaction');
-          res.body.should.be.jsonSchema(transactionSchema);
-        });
+        .send(transactionData);
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.have.property('transaction');
+      res.body.should.be.jsonSchema(transactionSchema);
     });
 
     it('it should not POST a empty transaction', async () => {
@@ -175,19 +171,17 @@ describe('Transactions', () => {
       });
       const token = authenticateUser(user);
 
-      chai
+      const res = await chai
         .request(server)
         .post(`/cashiers/${cashier.id}/transactions`)
         .set('authorization', `Bearer ${token}`)
-        .send(transaction)
-        .end((err, res) => {
-          res.should.have.status(422);
-          res.body.should.be.a('object');
-          res.body.should.have.property('error');
-          res.body.should.have.property('fields');
-          res.body.fields.should.have.property('type');
-          res.body.fields.should.have.property('value');
-        });
+        .send(transaction);
+      res.should.have.status(422);
+      res.body.should.be.a('object');
+      res.body.should.have.property('error');
+      res.body.should.have.property('fields');
+      res.body.fields.should.have.property('type');
+      res.body.fields.should.have.property('value');
     });
   });
 });

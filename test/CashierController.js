@@ -82,15 +82,13 @@ describe('Cashiers', () => {
 
       const token = authenticateUser(user);
 
-      chai
+      const res = await chai
         .request(server)
         .get('/cashiers')
-        .set('authorization', `Bearer ${token}`)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          res.body.should.be.jsonSchema(cashierCollectionSchema);
-        });
+        .set('authorization', `Bearer ${token}`);
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.be.jsonSchema(cashierCollectionSchema);
     });
 
     // it('it should GET a single cashier, showing the financial resume', async () => {
@@ -132,17 +130,15 @@ describe('Cashiers', () => {
         name: 'Test chashier',
       };
       const token = authenticateUser(user);
-      chai
+      const res = await chai
         .request(server)
         .post('/cashiers')
         .set('authorization', `Bearer ${token}`)
-        .send(cashierData)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          res.body.should.have.property('cashier');
-          res.body.should.be.jsonSchema(cashierSchema);
-        });
+        .send(cashierData);
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.have.property('cashier');
+      res.body.should.be.jsonSchema(cashierSchema);
     });
 
     it('it should not POST a empty cashier', async () => {
@@ -154,18 +150,16 @@ describe('Cashiers', () => {
       });
       const token = authenticateUser(user);
 
-      chai
+      const res = await chai
         .request(server)
         .post('/cashiers')
         .set('authorization', `Bearer ${token}`)
-        .send(cashier)
-        .end((err, res) => {
-          res.should.have.status(422);
-          res.body.should.be.a('object');
-          res.body.should.have.property('error');
-          res.body.should.have.property('fields');
-          res.body.fields.should.have.property('name');
-        });
+        .send(cashier);
+      res.should.have.status(422);
+      res.body.should.be.a('object');
+      res.body.should.have.property('error');
+      res.body.should.have.property('fields');
+      res.body.fields.should.have.property('name');
     });
   });
 });

@@ -82,15 +82,13 @@ describe('Categories', () => {
 
       const token = authenticateUser(user);
 
-      chai
+      const res = await chai
         .request(server)
         .get('/categories')
-        .set('authorization', `Bearer ${token}`)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          res.body.should.be.jsonSchema(categoryCollectionSchema);
-        });
+        .set('authorization', `Bearer ${token}`);
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.be.jsonSchema(categoryCollectionSchema);
     });
   });
 
@@ -108,17 +106,15 @@ describe('Categories', () => {
         name: 'Test chashier',
       };
       const token = authenticateUser(user);
-      chai
+      const res = await chai
         .request(server)
         .post('/categories')
         .set('authorization', `Bearer ${token}`)
-        .send(categoryData)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          res.body.should.have.property('category');
-          res.body.should.be.jsonSchema(categorySchema);
-        });
+        .send(categoryData);
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.have.property('category');
+      res.body.should.be.jsonSchema(categorySchema);
     });
 
     it('it should not POST a empty category', async () => {
@@ -130,18 +126,16 @@ describe('Categories', () => {
       });
       const token = authenticateUser(user);
 
-      chai
+      const res = await chai
         .request(server)
         .post('/categories')
         .set('authorization', `Bearer ${token}`)
-        .send(category)
-        .end((err, res) => {
-          res.should.have.status(422);
-          res.body.should.be.a('object');
-          res.body.should.have.property('error');
-          res.body.should.have.property('fields');
-          res.body.fields.should.have.property('name');
-        });
+        .send(category);
+      res.should.have.status(422);
+      res.body.should.be.a('object');
+      res.body.should.have.property('error');
+      res.body.should.have.property('fields');
+      res.body.fields.should.have.property('name');
     });
   });
 });

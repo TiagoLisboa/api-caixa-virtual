@@ -26,44 +26,38 @@ describe('Users', () => {
    * Test the /POST route
    */
   describe('/POST user', () => {
-    it('it should POST a user', done => {
+    it('it should POST a user', async () => {
       let user = {
         name: 'Testenaldo',
         email: 'testenaldo@email.com',
         password: 'grandetestenaldo',
       };
-      chai
+      const res = await chai
         .request(server)
         .post('/users')
-        .send(user)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          res.body.should.have.property('user');
-          res.body.user.should.have.property('id');
-          res.body.user.should.have.property('name');
-          res.body.user.should.have.property('email');
-          res.body.user.should.not.have.property('password');
-          done();
-        });
+        .send(user);
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.have.property('user');
+      res.body.user.should.have.property('id');
+      res.body.user.should.have.property('name');
+      res.body.user.should.have.property('email');
+      res.body.user.should.not.have.property('password');
     });
 
-    it('it should not POST a empty user', done => {
+    it('it should not POST a empty user', async () => {
       let user = {};
-      chai
+      const res = await chai
         .request(server)
         .post('/users')
-        .send(user)
-        .end((err, res) => {
-          res.should.have.status(422);
-          res.body.should.be.a('object');
-          res.body.should.have.property('error');
-          res.body.should.have.property('fields');
-          res.body.fields.should.have.property('name');
-          res.body.fields.should.have.property('email');
-          res.body.fields.should.have.property('password');
-          done();
-        });
+        .send(user);
+      res.should.have.status(422);
+      res.body.should.be.a('object');
+      res.body.should.have.property('error');
+      res.body.should.have.property('fields');
+      res.body.fields.should.have.property('name');
+      res.body.fields.should.have.property('email');
+      res.body.fields.should.have.property('password');
     });
   });
 });
