@@ -93,7 +93,7 @@ describe('Transactions', () => {
 
       chai
         .request(server)
-        .get(`/cashier/${cashier.id}/transactions`)
+        .get(`/cashiers/${cashier.id}/transactions`)
         .set('authorization', `Bearer ${token}`)
         .end((err, res) => {
           res.should.have.status(200);
@@ -125,7 +125,7 @@ describe('Transactions', () => {
       const token = authenticateUser(user);
       chai
         .request(server)
-        .post(`/cashier/${cashier.id}/transactions`)
+        .post(`/cashiers/${cashier.id}/transactions`)
         .set('authorization', `Bearer ${token}`)
         .send(transactionData)
         .end((err, res) => {
@@ -150,7 +150,7 @@ describe('Transactions', () => {
 
       chai
         .request(server)
-        .post(`/cashier/${cashier.id}/transactions`)
+        .post(`/cashiers/${cashier.id}/transactions`)
         .set('authorization', `Bearer ${token}`)
         .send(transaction)
         .end((err, res) => {
