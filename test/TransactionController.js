@@ -101,30 +101,6 @@ describe('Transactions', () => {
           res.body.should.be.jsonSchema(transactionCollectionSchema);
         });
     });
-
-    // it('it should GET a single transaction, showing the financial resume', async () => {
-    //   const user = await User.create({
-    //     name: 'testinaldo',
-    //     email: 'testinaldo@email.com',
-    //     password: 'password',
-    //   });
-    //   const transaction = await user.createTransaction({
-    //     name: 'transaction',
-    //   });
-    //   const token = authenticateUser(user);
-    //   const { id } = transaction;
-
-    //   chai
-    //     .request(server)
-    //     .get(`/transactions/${id}`)
-    //     .set('authorization', `Bearer ${token}`)
-    //     .end((err, res) => {
-    //       res.should.have.status(200);
-    //       res.body.should.be.a('object');
-    //       res.body.should.have.property('transaction');
-    //       res.body.should.be.jsonSchema(transactionSchema);
-    //     });
-    // });
   });
 
   /*
