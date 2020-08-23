@@ -42,7 +42,6 @@ class CashierController {
   async store(req, res) {
     const cashierSchema = Joi.object({
       name: Joi.string().required(),
-      user_id: Joi.number().required(),
     });
     let result;
     try {
@@ -53,7 +52,7 @@ class CashierController {
       }
     }
     try {
-      const user = await User.findByPk(result.user_id);
+      const user = await User.findByPk(req.userId);
       const cashier = await user.createCashier({ name: result.name });
       res.send(new CashierResourcer(cashier));
     } catch (err) {

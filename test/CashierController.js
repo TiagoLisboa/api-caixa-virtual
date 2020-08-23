@@ -125,7 +125,6 @@ describe('Cashiers', () => {
       });
       const cashierData = {
         name: 'Test chashier',
-        user_id: user.id,
       };
       const token = authenticateUser(user);
       chai
@@ -161,7 +160,6 @@ describe('Cashiers', () => {
           res.body.should.have.property('error');
           res.body.should.have.property('fields');
           res.body.fields.should.have.property('name');
-          res.body.fields.should.have.property('user_id');
         });
     });
   });
