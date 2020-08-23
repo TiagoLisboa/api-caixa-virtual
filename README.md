@@ -92,7 +92,7 @@ Cria um novo caixa.
 **request body:**
 ```json
 {
-	"name": "string"
+  "name": "string"
 }
 ```
 **response example:**
@@ -227,18 +227,16 @@ Cria uma nova categoria.
 **request body:**
 ```json
 {
-	"name": "string"
+  "name": "string"
 }
 ```
 **response example:**
 ```json
 {
-  "categories": [
-    {
-      "id": 1,
-      "name": "Alimentação"
-    }
-  ]
+  "category": {
+    "id": 1,
+    "name": "Alimentação"
+  }
 }
 ```
 
@@ -254,18 +252,16 @@ Altera os valores de uma categoria.
 **request body:**
 ```json
 {
-	"name": "string"
+  "name": "string"
 }
 ```
 **response example:**
 ```json
 {
-  "categories": [
-    {
-      "id": 1,
-      "name": "Alimentação"
-    }
-  ]
+  "category": {
+    "id": 1,
+    "name": "Alimentação"
+  }
 }
 ```
 
@@ -327,9 +323,9 @@ Cria uma nova movimentação na caixa.
 **request body:**
 ```json
 {
-	"type": "number",
-	"value": "number",
-	"categories": "array",
+  "type": "number",
+  "value": "number",
+  "categories": "array",
   "description": "string"
 }
 ```
@@ -358,8 +354,8 @@ Altera os valores de uma movimentação.
 **request body:**
 ```json
 {
-	"type": "number",
-	"value": "number",
+  "type": "number",
+  "value": "number",
   "description": "string"
 }
 ```
