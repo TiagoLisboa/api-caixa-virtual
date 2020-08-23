@@ -11,7 +11,9 @@ Se você preferir utilizar um ambiente docker, basta executar `docker-compose up
 ## Testes
 A API Caixa Virtual vem com uma suite de testes bem completa, abordando todas as rotas implementadas. Para rodar os testes execute o comando `yarn test`. Os testes utilizam um banco sqlite, então, por favor, instale o `sqlite3` na sua máquina.
 
+
 ## Rotas da API
+Você pode acessar essas rotas abaixo através do link <https://tiago-caixa-virtual-api.herokuapp.com/>.
 ### POST /users
 Cria um novo usuário.
 
