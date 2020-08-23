@@ -1,23 +1,12 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('transactions', {
+    return queryInterface.createTable('transactioncategories', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
-      },
-      type: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      value: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
-      },
-      description: {
-        type: Sequelize.TEXT,
       },
       create_at: {
         allowNull: false,
@@ -29,12 +18,25 @@ module.exports = {
         type: Sequelize.DATE,
         field: 'updated_at',
       },
-      cashier_id: {
+      category_id: {
         type: Sequelize.INTEGER,
+        field: 'category_id',
         onDelete: 'CASCADE',
         references: {
           model: {
-            tableName: 'cashiers',
+            tableName: 'categories',
+          },
+          key: 'id',
+        },
+        allowNull: false,
+      },
+      transaction_id: {
+        type: Sequelize.INTEGER,
+        field: 'transaction_id',
+        onDelete: 'CASCADE',
+        references: {
+          model: {
+            tableName: 'transactions',
           },
           key: 'id',
         },
@@ -43,6 +45,7 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('transactions');
+    return queryInterface.dropTable('TransactionCategories');
   },
 };
+

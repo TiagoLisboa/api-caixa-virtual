@@ -13,10 +13,8 @@ class Category extends Model {
   }
 
   static associate(models) {
-    this.hasMany(models.Transaction, {
-      foreignKey: 'category_id',
-      as: 'transactions',
-      onDelete: 'CASCADE',
+    this.belongsToMany(models.Transaction, {
+      through: models.TransactionCategory,
     });
     this.belongsTo(models.User, {
       foreignKey: 'user_id',
@@ -27,4 +25,3 @@ class Category extends Model {
 }
 
 export default Category;
-

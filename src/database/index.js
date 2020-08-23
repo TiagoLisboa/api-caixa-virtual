@@ -6,9 +6,10 @@ import User from '../app/models/user';
 import Cashier from '../app/models/cashier';
 import Category from '../app/models/category';
 import Transaction from '../app/models/transaction';
+import TransactionCategory from '../app/models/transactioncategory';
 
 const env = process.env.NODE_ENV;
-const models = [User, Cashier, Category, Transaction];
+const models = [User, Cashier, Category, Transaction, TransactionCategory];
 
 class Database {
   constructor() {

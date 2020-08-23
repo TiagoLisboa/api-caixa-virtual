@@ -20,10 +20,8 @@ class Transaction extends Model {
       as: 'cashier',
       onDelete: 'CASCADE',
     });
-    this.belongsTo(models.Category, {
-      foreignKey: 'category_id',
-      as: 'category',
-      onDelete: 'CASCADE',
+    this.belongsToMany(models.Category, {
+      through: models.TransactionCategory,
     });
   }
 }
