@@ -184,4 +184,105 @@ describe('Transactions', async () => {
       res.body.fields.should.have.property('value');
     });
   });
+
+  /*
+   * Test the /PUT route
+   */
+  describe('/PUT transaction', () => {
+    it('it should PUT a transaction', async () => {
+      const user = await User.create({
+        name: 'Fulaninho',
+        email: 'fulano@email.com',
+        password: 'password',
+      });
+      const cashier = await user.createCashier({ name: 'teste' });
+      const category = await user.createCategory({
+        name: 'Test Category',
+      });
+      const transaction = await cashier.createTransaction({
+        type: 0,
+        value: 15,
+        categories: [category.id],
+        description: 'not mandatory',
+      });
+      const transactionData = {
+        type: 1,
+        value: 15,
+        description: 'still not mandatory',
+      };
+      const token = authenticateUser(user);
+      const res = await chai
+        .request(server)
+        .put(`/cashiers/${cashier.id}/transactions/${transaction.id}`)
+        .set('authorization', `Bearer ${token}`)
+        .send(transactionData);
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.have.property('transaction');
+      res.body.should.be.jsonSchema(transactionSchema);
+    });
+
+    it('it should not PUT a empty transaction', async () => {
+      const user = await User.create({
+        name: 'Fulaninho',
+        email: 'fulano@email.com',
+        password: 'password',
+      });
+      const cashier = await user.createCashier({ name: 'teste' });
+      const category = await user.createCategory({
+        name: 'Test Category',
+      });
+      const transaction = await cashier.createTransaction({
+        type: 0,
+        value: 15,
+        categories: [category.id],
+        description: 'not mandatory',
+      });
+      const transactionData = {};
+      const token = authenticateUser(user);
+
+      const res = await chai
+        .request(server)
+        .put(`/cashiers/${cashier.id}/transactions/${transaction.id}`)
+        .set('authorization', `Bearer ${token}`)
+        .send(transactionData);
+      res.should.have.status(422);
+      res.body.should.be.a('object');
+      res.body.should.have.property('error');
+      res.body.should.have.property('fields');
+      res.body.fields.should.have.property('type');
+      res.body.fields.should.have.property('value');
+    });
+  });
+
+  /*
+   * Test the /DELETE route
+   */
+  describe('/DELETE transaction', () => {
+    it('it should DELETE a transaction', async () => {
+      const user = await User.create({
+        name: 'Fulaninho',
+        email: 'fulano@email.com',
+        password: 'password',
+      });
+      const cashier = await user.createCashier({ name: 'teste' });
+      const category = await user.createCategory({
+        name: 'Test Category',
+      });
+      const transaction = await cashier.createTransaction({
+        type: 0,
+        value: 15,
+        categories: [category.id],
+        description: 'not mandatory',
+      });
+      const token = authenticateUser(user);
+      const res = await chai
+        .request(server)
+        .delete(`/cashiers/${cashier.id}/transactions/${transaction.id}`)
+        .set('authorization', `Bearer ${token}`);
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.have.property('message');
+    });
+  });
 });
