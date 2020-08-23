@@ -41,12 +41,12 @@ class TransactionsController {
     const transactionSchema = Joi.object({
       type: Joi.number().required(),
       value: Joi.number().required(),
-      category: Joi.number().required(),
-      description: Joi.string().required(),
+      categories: Joi.array().items(Joi.number()),
+      description: Joi.string(),
     });
     try {
       const result = validateSchema(req.body, transactionSchema);
-      const { type, value, category, description } = result;
+      const { type, value, categories, description } = result;
 
       const cashier = await Cashier.findByPk(req.params.cashierId);
       // TODO: create model related services to handle database operations
@@ -59,9 +59,9 @@ class TransactionsController {
       const transaction = await cashier.createTransaction({
         type,
         value,
-        category,
         description,
       });
+      await transaction.addCategories(categories);
       return res.send(new TransactionResource(transaction));
     } catch (err) {
       if (err instanceof ValidationException) {

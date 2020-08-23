@@ -4,6 +4,7 @@ import chaiHttp from 'chai-http';
 import chaiJsonSchema from 'chai-json-schema';
 import Transaction from '../src/app/models/transaction';
 import Cashier from '../src/app/models/cashier';
+import Category from '../src/app/models/category';
 import User from '../src/app/models/user';
 import server, { stop } from '../src/server';
 import authenticateUser from './authenticateUser';
@@ -22,11 +23,18 @@ const transactionSchema = {
   properties: {
     transaction: {
       type: 'object',
-      required: ['type', 'value', 'category', 'description'],
+      required: ['type', 'value'],
       properties: {
         type: { type: 'number' },
         value: { type: 'number' },
-        category: { type: 'number' },
+        categories: {
+          type: 'array',
+          items: {
+            type: 'object',
+            required: ['name'],
+            properties: { name: { type: 'string' } },
+          },
+        },
         description: { type: 'string' },
       },
     },
@@ -42,11 +50,18 @@ const transactionCollectionSchema = {
       type: 'array',
       items: {
         type: 'object',
-        required: ['type', 'value', 'category'],
+        required: ['type', 'value'],
         properties: {
           type: { type: 'number' },
           value: { type: 'number' },
-          category: { type: 'number' },
+          categories: {
+            type: 'array',
+            items: {
+              type: 'object',
+              required: ['name'],
+              properties: { name: { type: 'string' } },
+            },
+          },
           description: { type: 'string' },
         },
       },
@@ -61,6 +76,9 @@ describe('Transactions', () => {
       where: {},
     });
     await Cashier.destroy({
+      where: {},
+    });
+    await Category.destroy({
       where: {},
     });
     await User.destroy({
@@ -88,8 +106,8 @@ describe('Transactions', () => {
         {
           name: 'teste',
           transactions: [
-            { type: 0, value: 15, category: 3, description: 'not mandatory' },
-            { type: 0, value: 15, category: 3, description: 'not mandatory' },
+            { type: 0, value: 15, description: 'not mandatory' },
+            { type: 0, value: 15, description: 'not mandatory' },
           ],
         },
         {
@@ -121,13 +139,14 @@ describe('Transactions', () => {
         email: 'fulano@email.com',
         password: 'password',
       });
-      const cashier = await user.createCashier({
-        name: 'teste',
+      const cashier = await user.createCashier({ name: 'teste' });
+      const category = await user.createCategory({
+        name: 'Test Category',
       });
       const transactionData = {
         type: 0,
         value: 15,
-        category: 3,
+        categories: [category.id],
         description: 'not mandatory',
       };
       const token = authenticateUser(user);
@@ -168,7 +187,6 @@ describe('Transactions', () => {
           res.body.should.have.property('fields');
           res.body.fields.should.have.property('type');
           res.body.fields.should.have.property('value');
-          res.body.fields.should.have.property('category');
         });
     });
   });

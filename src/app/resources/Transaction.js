@@ -4,7 +4,7 @@ class Transaction {
       id: transaction.id,
       type: transaction.type,
       value: transaction.value,
-      category: transaction.category,
+      categories: transaction.categories,
       description: transaction.description,
     };
   }

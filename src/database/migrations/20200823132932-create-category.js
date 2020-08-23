@@ -10,6 +10,7 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
+        unique: true,
       },
       created_at: {
         allowNull: false,
@@ -39,4 +40,3 @@ module.exports = {
     return queryInterface.dropTable('categories');
   },
 };
-
