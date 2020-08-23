@@ -11,7 +11,8 @@
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build ./src -s",
     "build": "npm run clean && npm run build-babel",
-    "start": "npm run build && node ./build/server.js"
+    "start": "npm run build && node ./build/server.js",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "@sentry/node": "5.12.2",
