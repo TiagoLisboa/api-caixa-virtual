@@ -6,7 +6,7 @@ A API Caixa Virtual é toda escrita em NodeJs e tem um banco em postgres, então
 
 Assim, você terá uma instancia da API Caixa Virtual rodando na sua máquina no endereço `localhost:3333`.
 
-Se você preferir utilizar um ambiente docker, basta executar `docker-compose up` para subir uma infraestrutura de banco e aplicação em máqinas virtuais.
+Se você preferir utilizar um ambiente docker, basta alterar a entrada `DB_HOST` no seu arquivo `.env` para `postgres` e executar `docker-compose up` para subir uma infraestrutura de banco e aplicação em máqinas virtuais.
 
 ## Testes
 A API Caixa Virtual vem com uma suite de testes bem completa, abordando todas as rotas implementadas. Para rodar os testes execute o comando `yarn test`. Os testes utilizam um banco sqlite, então, por favor, instale o `sqlite3` na sua máquina.
